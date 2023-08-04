@@ -1,0 +1,130 @@
+
+1)
+
+CREATE TABLE Country (
+	id_country SERIAL PRIMARY KEY,
+	name_country VARCHAR(100) NOT NULL
+);
+
+CREATE TABLE Leauge(
+	id_leauge SERIAL PRIMARY KEY,
+	name_leauge VARCHAR(100) NOT NULL,
+	id_country INTEGER,
+	FOREIGN KEY(id_country) REFERENCES Country(id_country)
+);
+
+CREATE TABLE Team(
+	id_team SERIAL PRIMARY KEY,
+	name_team VARCHAR(100) NOT NULL,
+	id_leauge INTEGER,
+	FOREIGN KEY(id_leauge) REFERENCES Leauge(id_leauge),
+	establishment_year INTEGER NOT NULL,
+	goals_scored INTEGER NOT NULL,
+	goals_conceded INTEGER NOT NULL,
+	point_team INTEGER NOT NULL,
+	level_team INTEGER NOT NULL
+);
+
+CREATE TABLE Player(
+	id_player SERIAL PRIMARY KEY,
+	firstName_player VARCHAR(100) NOT NULL, 
+	lastName_player VARCHAR(100) NOT NULL,
+	id_team INTEGER,
+	FOREIGN KEY(id_team) REFERENCES Team(id_team),
+	id_country INTEGER,
+	FOREIGN KEY(id_country) REFERENCES Country(id_country),
+	goals_scored_player INTEGER NOT NULL,
+	goals_conceded_player INTEGER
+);
+
+---------------------------------------------------------------
+2)
+
+ INSERT INTO Country (name_country) VALUES
+  ('Turkey'),
+  ('Spain'),
+  ('Brazil'),
+  ('France'),
+  ('Germany'),
+  ('England'),
+  ('Argentina'),
+  ('Italy'),
+  ('Netherlands'),
+  (‘Portugal');
+
+INSERT INTO Leauge (name_leauge, id_country) VALUES
+   ('Super Leauge', 1)
+   ('La Liga', 2),
+   ('Brazil Serie A',3),
+   ('Ligue 1', 4),
+   ('Bundesliga', 5),    ('Premier League', 6),
+   ('Argentina Premier League',7),
+   ('Serie A', 8),
+   (‘Eredivisie',9),
+   ('Portugal Premier League’,10),
+   ('1.Lig', 1),
+   ('2.Lig', 1);
+
+INSERT INTO Team (name_team, id_leauge, establishment_year, goals_scored, goals_conceded, point_team, level_team) 
+VALUES
+('FENERBAHÇE',1,1907,1993400,10,100,1),
+('gs',1,1905,150,180,15,1),
+('beşiktaş', 1, 1903, 15, 190,8,1 ),
+('FC Barcelona',2,1949,199,10,100,1),
+('Real Madrid',2,1934,150,10,13,1),
+('Atletico Madrid', 2, 1955, 15, 120,45,1 ),
+('Botafogo',3,1939,199,10,100,1),
+('Flamengo',3,1934,150,10,13,1),
+('Palmeiras', 3, 1925, 15, 120,45,1 ),
+('Kocaelispor',1,1567,19,10,10,2),
+('Bodrumspor',1,1955,150,180,15,2),
+('Edirnespor', 1, 1956, 15, 190,8,3 ); 
+	
+
+INSERT INTO Player (firstname_player, lastname_player, id_team, id_country, goals_scored_player, goals_conceded_player)
+VALUES
+--('Alex De', 'Souza',1, 3,100,null )
+('Arda', 'Güler',1,1,55,null),
+('Roberto', 'Carlos',1,3,30,null),
+('Altay','Bayındır',1,1,0,100),
+('Mauro','Icardi',2,7,40,null),
+('Fernando','Muslera',2,7,0,85),
+('Cenk','Tosun',3,1,55,null);
+
+--------------------------------------------------------
+
+3)   
+SELECT name_leauge FROM Leauge
+INNER JOIN Country ON Leauge.id_country = Country.id_country
+WHERE name_country = ‘TURKEY';
+
+4) 
+SELECT name_leauge FROM Leauge
+INNER JOIN Country ON Leauge.id_country = Country.id_country
+WHERE name_country = ‘TURKEY';
+
+5) 
+SELECT name_leauge FROM Leauge
+INNER JOIN Country ON Leauge.id_country = Country.id_country
+WHERE name_country = 'TURKEY';  6)
+
+6)
+SELECT AVG(point_team) FROM Team
+Where id_leauge = 1;
+
+7)
+SELECT firstname_player, lastname_player, MAX(goals_scored_player) FROM Player 
+GROUP BY firstname_player, lastname_player;
+
+8) 
+SELECT * FROM Team
+WHERE goals_scored > goals_conceded;
+
+9) 
+
+SELECT t.name_team, t.goals_scored AS team_goals, SUM(p.goals_scored_player) AS total_player_goals
+FROM Team t
+JOIN Player p ON t.id_team = p.id_team
+WHERE t.id_team = 1
+GROUP BY t.name_team, t.goals_scored;
+
