@@ -4,27 +4,33 @@ public class RecursiveUsAlma {
 
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
+        System.out.print("Bir sayı girin: ");
+        int sayi = scanner.nextInt();
 
-        System.out.print("Taban değerini girin: ");
-        int taban = scanner.nextInt();
-
-        System.out.print("Üs değerini girin: ");
-        int us = scanner.nextInt();
-
-        scanner.close();
-
-        int sonuc = usAlma(taban, us);
-        System.out.println(taban + " üzeri " + us + " = " + sonuc);
+        if (asalMi(sayi, 2)) {
+            System.out.println(sayi + " asal bir sayıdır.");
+        } else {
+            System.out.println(sayi + " asal bir sayı değildir.");
+        }
     }
 
-    public static int usAlma(int taban, int us) {
-        if (us == 0) {
-            return 1;
-        } else {
-            return taban * usAlma(taban, us - 1);
+    public static boolean asalMi(int sayi, int bolen) {
+        // Eğer sayı 2 veya daha küçük bir değerse, asal olma şartını sağlamaz.
+        if (sayi <= 2) {
+            return (sayi == 2);
         }
 
+        // Eğer bolen, sayının yarısını aştıysa, artık bölen bulunamaz, asal kabul edilir.
+        if (bolen > sayi / 2) {
+            return true;
+        }
 
+        // Eğer sayı bölünebilirse, asal değildir.
+        if (sayi % bolen == 0) {
+            return false;
+        }
 
+        // Diğer durumlarda, rekürsif olarak bir sonraki böleni kontrol ederiz.
+        return asalMi(sayi, bolen + 1);
     }
 }
